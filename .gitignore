@@ -1,12 +1,14 @@
 
+
+
 .DS_Store
 
-# Eclipse Stuff
-.metadata/
-.settings/
+build*/
+nrtest*/
+
+*_export.h
+
 
 build/
 nrtests/
 upload/
-
-*_export.h
