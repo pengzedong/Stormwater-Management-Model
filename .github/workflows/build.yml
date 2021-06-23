@@ -1,0 +1,62 @@
+#
+#  build.yml - GitHub Actions CI build for 32 and 64-bit swmm
+#
+#  Created: June 23, 2021
+#  Updated:
+#
+#  Author: Michael E. Tryby
+#          US EPA - ORD/CESER
+#
+
+name: Build
+
+on:
+  push:
+    branches: build
+
+jobs:
+  win_build:
+    strategy:
+      fail-fast: false
+    matrix:
+      os: [windows-2016, windows-2016]
+      include:
+      - os: windows-2016
+        build_package:  make.cmd -g "Visual Studio 15 2017 Win32"
+        experimental: false
+        defaults:
+          run:
+            shell: cmd
+            working-directory: ./ci-tools/windows
+
+      - os: windows-2016
+        build_package:  make.cmd -g "Visual Studio 15 2017 Win64"
+        experimental: true
+        defaults:
+          run:
+            shell: cmd
+            working-directory: ./ci-tools/windows
+
+    env:
+      PROJECT: swmm
+      BUILD_HOME: build
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+
+    - name: Checkout ci-tools
+      uses: actions/checkout@v2
+      with:
+        repository: michaeltryby/ci-tools
+        path: ci-tools
+
+    - name: Build and package
+      run: ${{ matrix.build_package }}
+
+    - name: Upload artifacts
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: nrtest-artifacts
+        path: upload/
