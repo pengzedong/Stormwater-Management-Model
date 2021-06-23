@@ -22,7 +22,7 @@ jobs:
         os: [windows-2016, windows-2016]
         include:
         - os: windows-2016
-          build_package:  make.cmd -g "Visual Studio 15 2017 Win32"
+          build_package:  make.cmd /g "Visual Studio 15 2017 Win32"
           experimental: false
           defaults:
             run:
@@ -30,7 +30,7 @@ jobs:
               working-directory: ./ci-tools/windows
 
         - os: windows-2016
-          build_package:  make.cmd -g "Visual Studio 15 2017 Win64"
+          build_package:  make.cmd /g "Visual Studio 15 2017 Win64"
           experimental: true
           defaults:
             run:
