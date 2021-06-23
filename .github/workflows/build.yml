@@ -58,7 +58,7 @@ jobs:
         path: ci-tools
 
     - name: Build and package
-      run: ${{ matrix.build_package }}
+      run: ./${{ matrix.build_package }}
 
     - name: Upload artifacts
       if: ${{ always() }}
