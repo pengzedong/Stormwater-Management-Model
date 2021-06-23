@@ -1,0 +1,77 @@
+#
+#  build.yml - GitHub Actions CI build for Win32 and Win64 swmm-solver
+#
+#  Created: June 23, 2021
+#  Updated:
+#
+#  Author: Michael E. Tryby
+#          US EPA - ORD/CESER
+#
+
+name: Build
+
+on:
+  push:
+    branches: build*
+
+jobs:
+  win_build-32:
+    runs-on: windows-2016
+    defaults:
+      run:
+        shell: cmd
+        working-directory: ci-tools/windows
+
+    env:
+      PROJECT: swmm
+      BUILD_HOME: build
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+
+    - name: Checkout ci-tools
+      uses: actions/checkout@v2
+      with:
+        repository: michaeltryby/ci-tools
+        path: ci-tools
+
+    - name: Build and package
+      run: ./make.cmd /g "Visual Studio 15 2017"
+
+    - name: Upload artifacts
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v2
+      with:
+        path: upload/
+
+
+  win_build-64:
+    runs-on: windows-2016
+    defaults:
+      run:
+        shell: cmd
+        working-directory: ci-tools/windows
+
+    env:
+      PROJECT: swmm
+      BUILD_HOME: build
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+
+    - name: Checkout ci-tools
+      uses: actions/checkout@v2
+      with:
+        repository: michaeltryby/ci-tools
+        path: ci-tools
+
+    - name: Build and package
+      run: ./make.cmd /g "Visual Studio 15 2017 Win64"
+
+    - name: Upload artifacts
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v2
+      with:
+        path: upload/
