@@ -18,25 +18,31 @@ jobs:
   win_build:
     strategy:
       fail-fast: false
-    matrix:
-      os: [windows-2016, windows-2016]
-      include:
-      - os: windows-2016
-        build_package:  make.cmd -g "Visual Studio 15 2017 Win32"
-        experimental: false
-        defaults:
-          run:
-            shell: cmd
-            working-directory: ./ci-tools/windows
+      matrix:
+        os: [windows-2016, windows-2016]
+        include:
+        - os: windows-2016
+          build_package:  make.cmd -g "Visual Studio 15 2017 Win32"
+          experimental: false
+          defaults:
+            run:
+              shell: cmd
+              working-directory: ./ci-tools/windows
 
-      - os: windows-2016
-        build_package:  make.cmd -g "Visual Studio 15 2017 Win64"
-        experimental: true
-        defaults:
-          run:
-            shell: cmd
-            working-directory: ./ci-tools/windows
+        - os: windows-2016
+          build_package:  make.cmd -g "Visual Studio 15 2017 Win64"
+          experimental: true
+          defaults:
+            run:
+              shell: cmd
+              working-directory: ./ci-tools/windows
 
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+    defaults:
+      run:
+        shell: ${{ matrix.defaults.run.shell }}
+        working-directory: ${{ matrix.defaults.run.working-directory }}
     env:
       PROJECT: swmm
       BUILD_HOME: build
